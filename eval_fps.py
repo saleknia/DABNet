@@ -5,6 +5,7 @@ import torch.backends.cudnn as cudnn
 from argparse import ArgumentParser
 from builders.model_builder import build_model
 
+# Hello world
 
 def compute_speed(model, input_size, device, iteration=100):
     torch.cuda.set_device(device)
