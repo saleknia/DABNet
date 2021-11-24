@@ -17,6 +17,8 @@ from utils.loss import CrossEntropyLoss2d, ProbOhemCrossEntropy2d
 from utils.lr_scheduler import WarmupPolyLR
 from utils.convert_state import convert_state_dict
 
+#num_worker
+
 GLOBAL_SEED = 1234
 
 
@@ -79,10 +81,13 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
         labels = Variable(labels.long()).cuda()
         output = model(images)
         loss = criterion(output, labels)
-        scheduler.step()
+
         optimizer.zero_grad()  # set the grad to zero
         loss.backward()
         optimizer.step()
+
+        scheduler.step()
+
         epoch_loss.append(loss.item())
         time_taken = time.time() - start_time
 
@@ -286,7 +291,7 @@ if __name__ == '__main__':
     parser.add_argument('--input_size', type=str, default="512,1024", help="input size of model")
     parser.add_argument('--random_mirror', type=bool, default=True, help="input image random mirror")
     parser.add_argument('--random_scale', type=bool, default=True, help="input image resize 0.5 to 2")
-    parser.add_argument('--num_workers', type=int, default=4, help=" the number of parallel threads")
+    parser.add_argument('--num_workers', type=int, default=2, help=" the number of parallel threads")
     parser.add_argument('--lr', type=float, default=4.5e-2, help="initial learning rate")
     parser.add_argument('--batch_size', type=int, default=8, help="the batch size is set to 16 for 2 GPUs")
     parser.add_argument('--savedir', default="./checkpoint/", help="directory to save the model snapshot")
